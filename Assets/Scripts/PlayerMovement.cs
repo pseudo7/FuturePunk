@@ -9,14 +9,24 @@ public class PlayerMovement : MonoBehaviour
     public float movementSmoothness = 15f;
     public float checkEnemyRadius = 20f;
     public float fireRate;
+    public Transform gun, gunTip;
 
     Animator playerAC;
     CapsuleCollider playerCollider;
+    LineRenderer line;
+    float gunOffset;
 
     private void Awake()
     {
         playerAC = GetComponent<Animator>();
         playerCollider = GetComponent<CapsuleCollider>();
+        line = gunTip.GetComponent<LineRenderer>();
+        line.enabled = false;
+    }
+
+    private void Start()
+    {
+        gunOffset = Vector3.Distance(gun.position, gunTip.position);
     }
 
     void Update()
@@ -29,19 +39,19 @@ public class PlayerMovement : MonoBehaviour
 
         transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(x, 0, y), 1 / movementSmoothness);
 
-        //if (Physics.CheckSphere(transform.position, checkEnemyRadius, LayerMask.GetMask("Enemy"), QueryTriggerInteraction.Collide))
-        //transform.LookAt(ClosestPosition(Physics.OverlapSphere(transform.position, checkEnemyRadius, LayerMask.GetMask("Enemy"))));
         var nearByEnemies = Physics.OverlapSphere(transform.position, checkEnemyRadius, LayerMask.GetMask("Enemy"), QueryTriggerInteraction.Collide);
-        var closestPoint = FindClosest(nearByEnemies);
+        Vector3 localPos;
+        var closestPoint = FindClosest(nearByEnemies, out localPos);
         if (nearByEnemies.Length > 0)
-            Fire(closestPoint);
+            StartCoroutine(Fire(closestPoint));
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(closestPoint - transform.position), .4f);
     }
 
-    Vector3 FindClosest(Collider[] colliders)
+    Vector3 FindClosest(Collider[] colliders, out Vector3 localPos)
     {
         float closest = float.MaxValue;
         Vector3 closestPoint = transform.forward;
+        localPos = transform.localPosition;
         foreach (var item in colliders)
         {
             float temp;
@@ -49,13 +59,17 @@ public class PlayerMovement : MonoBehaviour
             {
                 closest = temp;
                 closestPoint = item.transform.position;
+                localPos = item.transform.localPosition;
             }
         }
         return closestPoint;
     }
 
-    private void Fire(Vector3 enemyPos)
+    IEnumerator Fire(Vector3 enemyPos)
     {
-
+        line.enabled = true;
+        line.SetPositions(new Vector3[] { gun.position + gun.forward * gunOffset + Vector3.up * 2, enemyPos + Vector3.up * 2 });
+        yield return new WaitForEndOfFrame();
+        line.enabled = false;
     }
 }
