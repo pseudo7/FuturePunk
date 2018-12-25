@@ -69,7 +69,7 @@ public class Enemy : MonoBehaviour
         AudioManager.Instance.Play(Constants.ENEMY_LASER_AUDIO);
         countdown = 0;
         Handheld.Vibrate();
-        var player = playerTransform.GetComponent<PlayerMovement>();
+        var player = playerTransform.GetComponent<Player>();
         if (player.playerHealth > 0)
             if (player.PlayerHit())
                 yield break;

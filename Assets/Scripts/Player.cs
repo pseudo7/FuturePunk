@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-public class PlayerMovement : MonoBehaviour
+public class Player : MonoBehaviour
 {
     [HideInInspector] public int playerHealth;
     public float movementSmoothness = 15f;
@@ -12,14 +12,13 @@ public class PlayerMovement : MonoBehaviour
     public Transform gunTip;
 
     Animator playerAC;
-    CapsuleCollider playerCollider;
     LineRenderer line;
     float countdown;
+
     private void Awake()
     {
         playerHealth = Constants.PLAYER_HEALTH;
         playerAC = GetComponent<Animator>();
-        playerCollider = GetComponent<CapsuleCollider>();
         line = gunTip.GetComponent<LineRenderer>();
         line.enabled = false;
     }
@@ -67,8 +66,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Utility.isGameOver = true;
             AudioManager.Instance.Play(Constants.PLAYER_DEATH_AUDIO);
-            playerAC.enabled = false;
-            GetComponent<Animation>().Play("death", PlayMode.StopAll);
+            playerAC.SetTrigger("Death");
             foreach (var col in GetComponents<Collider>())
                 col.enabled = false;
 
@@ -78,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
             GameManager.Instance.RestartLevel(2f);
             return true;
         }
+        playerAC.ResetTrigger("Death");
         return false;
     }
 
