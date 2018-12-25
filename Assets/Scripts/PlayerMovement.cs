@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator Fire(Vector3 enemyPos)
     {
         line.enabled = true;
-        line.SetPositions(new Vector3[] { gunTip.position, enemyPos + new Vector3(0, gunTip.position.y, 0) /*+ Vector3.up * gunTip.position.y*/ });
+        line.SetPositions(new Vector3[] { gunTip.position, enemyPos + new Vector3(0, gunTip.position.y, 0) });
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
