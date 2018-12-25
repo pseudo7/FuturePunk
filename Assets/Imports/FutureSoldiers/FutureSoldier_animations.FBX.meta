@@ -6260,7 +6260,7 @@ ModelImporter:
       takeName: Take 001
       firstFrame: 980
       lastFrame: 995
-      wrapMode: 0
+      wrapMode: 1
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
@@ -6416,7 +6416,7 @@ ModelImporter:
       takeName: Take 001
       firstFrame: 1000
       lastFrame: 1030
-      wrapMode: 0
+      wrapMode: 1
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0

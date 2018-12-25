@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    public int enemyHealth = 10;
+
     Transform playerTransform;
     Animator enemyAC;
     NavMeshAgent enemyNMA;
@@ -24,18 +25,23 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         enemyNMA.isStopped = true;
-        //if (findingPlayerCoroutine != null)
-        //    StopCoroutine(findingPlayerCoroutine);
-        //enemyNMA.SetDestination(transform.position);
-        //enemyAC.SetBool("Shoot", true);
         enemyAnim.Play("Shoot");
     }
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    Debug.Log(collision.collider.name);
-    //}
-
+    public bool EnemyHit()
+    {
+        if (--enemyHealth <= 0)
+        {
+            foreach (var col in GetComponents<Collider>())
+                col.enabled = false;
+            enemyNMA.isStopped = true;
+            enemyAnim.Stop();
+            enemyAnim.Play(Random.Range(0, 2) % 2 == 0 ? "Death1" : "Death2", PlayMode.StopAll);
+            Destroy(gameObject, 1f);
+            return true;
+        }
+        return false;
+    }
 
     private void OnTriggerStay(Collider other)
     {
@@ -45,16 +51,8 @@ public class Enemy : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         enemyNMA.isStopped = false;
-
-        //findingPlayerCoroutine = StartCoroutine(GotoPlayerCoroutine());
-        //enemyAC.SetBool("Shoot", false);
         enemyAnim.Play("RunForward");
     }
-
-    //private void OnCollisionExit(Collision collision)
-    //{
-    //    findingPlayerCoroutine = StartCoroutine(GotoPlayerCoroutine());
-    //}
 
     IEnumerator GotoPlayerCoroutine()
     {

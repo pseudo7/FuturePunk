@@ -1631,6 +1631,7 @@ Animation:
   m_Animations:
   - {fileID: 7400000, guid: 3c21bb11ef1030b4ab55ac50dcabfd2a, type: 3}
   - {fileID: 7400022, guid: 3c21bb11ef1030b4ab55ac50dcabfd2a, type: 3}
+  - {fileID: 7400074, guid: 3c21bb11ef1030b4ab55ac50dcabfd2a, type: 3}
   - {fileID: 7400076, guid: 3c21bb11ef1030b4ab55ac50dcabfd2a, type: 3}
   m_WrapMode: 0
   m_PlayAutomatically: 1
@@ -1647,6 +1648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51d25df9747434a4abec913490787506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyHealth: 10
 --- !u!135 &135414484855171040
 SphereCollider:
   m_ObjectHideFlags: 1

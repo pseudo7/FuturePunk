@@ -1041,7 +1041,7 @@ Transform:
   m_GameObject: {fileID: 1898923971577646}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_Children:
   - {fileID: 4556988411877678}
   - {fileID: 4207889727600886}
@@ -1804,7 +1804,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSmoothness: 15
-  checkEnemyRadius: 20
+  checkEnemyRadius: 15
   fireRate: 3
   gunTip: {fileID: 4423412989846722}
 --- !u!120 &120193291196235420
@@ -1821,7 +1821,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 7a358da7cb35d9b40b0daa1cacb913d8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
