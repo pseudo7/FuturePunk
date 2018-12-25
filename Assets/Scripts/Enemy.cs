@@ -10,9 +10,11 @@ public class Enemy : MonoBehaviour
     Animator enemyAC;
     NavMeshAgent enemyNMA;
     Coroutine findingPlayerCoroutine;
+    Animation enemyAnim;
 
     void Awake()
     {
+        enemyAnim = GetComponent<Animation>();
         enemyAC = GetComponent<Animator>();
         enemyNMA = GetComponent<NavMeshAgent>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
@@ -25,7 +27,8 @@ public class Enemy : MonoBehaviour
         //if (findingPlayerCoroutine != null)
         //    StopCoroutine(findingPlayerCoroutine);
         //enemyNMA.SetDestination(transform.position);
-        enemyAC.SetBool("Shoot", true);
+        //enemyAC.SetBool("Shoot", true);
+        enemyAnim.Play("Shoot");
     }
 
     //private void OnCollisionEnter(Collision collision)
@@ -44,7 +47,8 @@ public class Enemy : MonoBehaviour
         enemyNMA.isStopped = false;
 
         //findingPlayerCoroutine = StartCoroutine(GotoPlayerCoroutine());
-        enemyAC.SetBool("Shoot", false);
+        //enemyAC.SetBool("Shoot", false);
+        enemyAnim.Play("RunForward");
     }
 
     //private void OnCollisionExit(Collision collision)
