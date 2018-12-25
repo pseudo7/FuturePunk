@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < enemyCount; i++)
             SpawnEnemy();
+        AudioManager.Instance.Play(Constants.BACKGROUND_AUDIO);
     }
 
     private void Update()

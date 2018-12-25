@@ -29,11 +29,6 @@ public class Enemy : MonoBehaviour
         findingPlayerCoroutine = StartCoroutine(GotoPlayerCoroutine());
     }
 
-    private void LateUpdate()
-    {
-
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         enemyNMA.isStopped = true;
@@ -44,6 +39,7 @@ public class Enemy : MonoBehaviour
     {
         if (--enemyHealth <= 0)
         {
+            AudioManager.Instance.Play(Constants.ENEMY_DEATH_AUDIO);
             foreach (var col in GetComponents<Collider>())
                 col.enabled = false;
             enemyNMA.isStopped = true;
@@ -70,13 +66,14 @@ public class Enemy : MonoBehaviour
 
     IEnumerator Fire()
     {
+        AudioManager.Instance.Play(Constants.ENEMY_LASER_AUDIO);
         countdown = 0;
-        line.enabled = true;
         Handheld.Vibrate();
         var player = playerTransform.GetComponent<PlayerMovement>();
         if (player.playerHealth > 0)
             if (player.PlayerHit())
                 yield break;
+        line.enabled = true;
         line.SetPositions(new Vector3[] { gunTip.position, playerTransform.position + new Vector3(0, gunTip.position.y, 0) });
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();

@@ -15,7 +15,6 @@ public class PlayerMovement : MonoBehaviour
     CapsuleCollider playerCollider;
     LineRenderer line;
     float countdown;
-    float origXScale;
     private void Awake()
     {
         playerHealth = Constants.PLAYER_HEALTH;
@@ -23,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
         playerCollider = GetComponent<CapsuleCollider>();
         line = gunTip.GetComponent<LineRenderer>();
         line.enabled = false;
-        origXScale = transform.GetChild(0).localScale.x;
     }
 
     void Update()
@@ -34,9 +32,6 @@ public class PlayerMovement : MonoBehaviour
         var x = CrossPlatformInputManager.GetAxis("Horizontal");
         var y = CrossPlatformInputManager.GetAxis("Vertical");
 
-        playerAC.SetFloat("S", x);
-        playerAC.SetFloat("W", y);
-
         transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(x, 0, y), 1 / movementSmoothness);
 
         var nearByEnemies = Physics.OverlapSphere(transform.position, checkEnemyRadius, LayerMask.GetMask("Enemy"), QueryTriggerInteraction.Collide);
@@ -44,6 +39,12 @@ public class PlayerMovement : MonoBehaviour
         if (nearByEnemies.Length > 0)
             FireAtRate(closestPoint);
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(closestPoint.position - transform.position), .4f);
+
+        if (!Utility.isGameOver)
+        {
+            playerAC.SetFloat("S", x);
+            playerAC.SetFloat("W", y);
+        }
     }
 
     private void LateUpdate()
@@ -54,11 +55,7 @@ public class PlayerMovement : MonoBehaviour
     private void FireAtRate(Transform enemyTransform)
     {
         if (countdown > 1 / fireRate)
-        {
-            countdown = 0;
-
             StartCoroutine(Fire(enemyTransform));
-        }
         else countdown += Time.deltaTime;
     }
 
@@ -69,14 +66,16 @@ public class PlayerMovement : MonoBehaviour
         if (playerHealth <= 0)
         {
             Utility.isGameOver = true;
+            AudioManager.Instance.Play(Constants.PLAYER_DEATH_AUDIO);
+            playerAC.enabled = false;
+            GetComponent<Animation>().Play("death", PlayMode.StopAll);
             foreach (var col in GetComponents<Collider>())
                 col.enabled = false;
 
             Handheld.Vibrate();
             Handheld.Vibrate();
             Handheld.Vibrate();
-            playerAC.SetTrigger("Death");
-            GameManager.Instance.RestartLevel(1f);
+            GameManager.Instance.RestartLevel(2f);
             return true;
         }
         return false;
@@ -84,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
 
     void UpdateHealthBar(int health)
     {
-        transform.GetChild(0).localScale = new Vector3(origXScale * health / (float)Constants.PLAYER_HEALTH, .2f, 1f);
+        transform.GetChild(0).localScale = new Vector3(Constants.ORIG_X_SCALE * health / (float)Constants.PLAYER_HEALTH, .2f, 1f);
     }
 
     Transform FindClosest(Collider[] colliders)
@@ -105,6 +104,8 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator Fire(Transform enemyTransform)
     {
+        AudioManager.Instance.Play(Constants.PLAYER_LASER_AUDIO);
+        countdown = 0;
         var enemy = enemyTransform.GetComponent<Enemy>();
         if (enemy.enemyHealth > 0)
             if (enemy.EnemyHit())
