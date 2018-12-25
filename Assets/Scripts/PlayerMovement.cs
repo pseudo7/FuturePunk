@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
@@ -7,9 +8,9 @@ public class PlayerMovement : MonoBehaviour
 {
     public float movementSmoothness = 15f;
     public float checkEnemyRadius = 20f;
+    public float fireRate;
 
-    public Animator playerAC;
-
+    Animator playerAC;
     CapsuleCollider playerCollider;
 
     private void Awake()
@@ -28,14 +29,19 @@ public class PlayerMovement : MonoBehaviour
 
         transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(x, 0, y), 1 / movementSmoothness);
 
-        if (Physics.CheckSphere(transform.position, checkEnemyRadius, LayerMask.GetMask("Enemy")))
-            transform.LookAt(ClosestPosition(Physics.OverlapSphere(transform.position, checkEnemyRadius, LayerMask.GetMask("Enemy"))));
+        //if (Physics.CheckSphere(transform.position, checkEnemyRadius, LayerMask.GetMask("Enemy"), QueryTriggerInteraction.Collide))
+        //transform.LookAt(ClosestPosition(Physics.OverlapSphere(transform.position, checkEnemyRadius, LayerMask.GetMask("Enemy"))));
+        var nearByEnemies = Physics.OverlapSphere(transform.position, checkEnemyRadius, LayerMask.GetMask("Enemy"), QueryTriggerInteraction.Collide);
+        var closestPoint = FindClosest(nearByEnemies);
+        if (nearByEnemies.Length > 0)
+            Fire(closestPoint);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(closestPoint - transform.position), .4f);
     }
 
-    Vector3 ClosestPosition(Collider[] colliders)
+    Vector3 FindClosest(Collider[] colliders)
     {
         float closest = float.MaxValue;
-        Vector3 closestPoint = Vector3.one;
+        Vector3 closestPoint = transform.forward;
         foreach (var item in colliders)
         {
             float temp;
@@ -46,5 +52,10 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         return closestPoint;
+    }
+
+    private void Fire(Vector3 enemyPos)
+    {
+
     }
 }
