@@ -5,6 +5,7 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [HideInInspector] public int playerHealth;
     public float movementSmoothness = 15f;
     public float checkEnemyRadius = 20f;
     public float fireRate;
@@ -14,17 +15,22 @@ public class PlayerMovement : MonoBehaviour
     CapsuleCollider playerCollider;
     LineRenderer line;
     float countdown;
-
+    float origXScale;
     private void Awake()
     {
+        playerHealth = Constants.PLAYER_HEALTH;
         playerAC = GetComponent<Animator>();
         playerCollider = GetComponent<CapsuleCollider>();
         line = gunTip.GetComponent<LineRenderer>();
         line.enabled = false;
+        origXScale = transform.GetChild(0).localScale.x;
     }
 
     void Update()
     {
+        if (Utility.isGameOver)
+            return;
+
         var x = CrossPlatformInputManager.GetAxis("Horizontal");
         var y = CrossPlatformInputManager.GetAxis("Vertical");
 
@@ -40,6 +46,11 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(closestPoint.position - transform.position), .4f);
     }
 
+    private void LateUpdate()
+    {
+        transform.GetChild(0).LookAt(Camera.main.transform);
+    }
+
     private void FireAtRate(Transform enemyTransform)
     {
         if (countdown > 1 / fireRate)
@@ -49,6 +60,31 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Fire(enemyTransform));
         }
         else countdown += Time.deltaTime;
+    }
+
+    public bool PlayerHit()
+    {
+        UpdateHealthBar(--playerHealth);
+
+        if (playerHealth <= 0)
+        {
+            Utility.isGameOver = true;
+            foreach (var col in GetComponents<Collider>())
+                col.enabled = false;
+
+            Handheld.Vibrate();
+            Handheld.Vibrate();
+            Handheld.Vibrate();
+            playerAC.SetTrigger("Death");
+            GameManager.Instance.RestartLevel(1f);
+            return true;
+        }
+        return false;
+    }
+
+    void UpdateHealthBar(int health)
+    {
+        transform.GetChild(0).localScale = new Vector3(origXScale * health / (float)Constants.PLAYER_HEALTH, .2f, 1f);
     }
 
     Transform FindClosest(Collider[] colliders)

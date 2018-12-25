@@ -4,11 +4,19 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
     public GameObject enemyPrefab;
 
     public EnemyTexture[] enemyTextures;
 
     public int enemyCount = 10;
+
+    private void Awake()
+    {
+        if (!Instance)
+            Instance = this;
+    }
 
     void Start()
     {
@@ -37,6 +45,17 @@ public class GameManager : MonoBehaviour
         mat.SetTexture("_Illum", null);
         gunRenderer.material = mat;
         Instantiate(enemyPrefab, new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)), Quaternion.identity);
+    }
+
+    public void RestartLevel(float delay)
+    {
+        StartCoroutine(LoadCurrentLevel(delay));
+    }
+
+    IEnumerator LoadCurrentLevel(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
     [System.Serializable]

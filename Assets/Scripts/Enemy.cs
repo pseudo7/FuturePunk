@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
 
     void Awake()
     {
+        enemyHealth = Constants.ENEMY_HEALTH;
         line = gunTip.GetComponent<LineRenderer>();
         line.enabled = false;
         enemyAnim = GetComponent<Animation>();
@@ -26,6 +27,11 @@ public class Enemy : MonoBehaviour
         enemyNMA = GetComponent<NavMeshAgent>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         findingPlayerCoroutine = StartCoroutine(GotoPlayerCoroutine());
+    }
+
+    private void LateUpdate()
+    {
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -66,8 +72,12 @@ public class Enemy : MonoBehaviour
     {
         countdown = 0;
         line.enabled = true;
-        line.SetPositions(new Vector3[] { gunTip.position, playerTransform.position + new Vector3(0, gunTip.position.y, 0) });
         Handheld.Vibrate();
+        var player = playerTransform.GetComponent<PlayerMovement>();
+        if (player.playerHealth > 0)
+            if (player.PlayerHit())
+                yield break;
+        line.SetPositions(new Vector3[] { gunTip.position, playerTransform.position + new Vector3(0, gunTip.position.y, 0) });
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
