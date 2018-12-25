@@ -1283,7 +1283,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1715377619889850}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.782, y: 0.589, z: 0.122}
+  m_LocalPosition: {x: 0.41, y: 2.22, z: 1.315}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4207889727600886}
@@ -1805,8 +1805,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSmoothness: 15
   checkEnemyRadius: 20
-  fireRate: 2
-  gun: {fileID: 4207889727600886}
+  fireRate: 3
   gunTip: {fileID: 4423412989846722}
 --- !u!120 &120193291196235420
 LineRenderer:

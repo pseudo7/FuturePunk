@@ -171,7 +171,43 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: "\nClip 'walk' has import animation warnings that might
+      lower retargeting quality:\nNote: Activate translation DOF on avatar to improve
+      retargeting quality.\n\t'Bind_Hips' is inbetween humanoid transforms and has
+      rotation animation that will be discarded.\n\nClip 'walkAndLook' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'Bind_Hips' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\nClip 'run'
+      has import animation warnings that might lower retargeting quality:\nNote: Activate
+      translation DOF on avatar to improve retargeting quality.\n\t'Bind_Hips' is
+      inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'runAndShooting' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Bind_Hips'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'strafeRight' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Bind_Hips'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'strafeLeft' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Bind_Hips'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'backpaddle' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Bind_Hips'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'jump' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Bind_Hips'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'crouchWalk' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Bind_Hips'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'melee' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Bind_Hips'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'death' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Bind_Hips'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'revive' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Bind_Hips'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 1

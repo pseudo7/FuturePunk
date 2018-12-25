@@ -9,12 +9,12 @@ public class PlayerMovement : MonoBehaviour
     public float movementSmoothness = 15f;
     public float checkEnemyRadius = 20f;
     public float fireRate;
-    public Transform gun, gunTip;
+    public Transform gunTip;
 
     Animator playerAC;
     CapsuleCollider playerCollider;
     LineRenderer line;
-    float gunOffset;
+    float countdown;
 
     private void Awake()
     {
@@ -22,11 +22,6 @@ public class PlayerMovement : MonoBehaviour
         playerCollider = GetComponent<CapsuleCollider>();
         line = gunTip.GetComponent<LineRenderer>();
         line.enabled = false;
-    }
-
-    private void Start()
-    {
-        gunOffset = Vector3.Distance(gun.position, gunTip.position);
     }
 
     void Update()
@@ -40,18 +35,29 @@ public class PlayerMovement : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(x, 0, y), 1 / movementSmoothness);
 
         var nearByEnemies = Physics.OverlapSphere(transform.position, checkEnemyRadius, LayerMask.GetMask("Enemy"), QueryTriggerInteraction.Collide);
-        Vector3 localPos;
-        var closestPoint = FindClosest(nearByEnemies, out localPos);
+        Transform closestTransform;
+        var closestPoint = FindClosest(nearByEnemies, out closestTransform);
         if (nearByEnemies.Length > 0)
-            StartCoroutine(Fire(closestPoint));
+            FireAtRate(closestPoint);
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(closestPoint - transform.position), .4f);
     }
 
-    Vector3 FindClosest(Collider[] colliders, out Vector3 localPos)
+    private void FireAtRate(Vector3 enemyPos)
+    {
+        if (countdown > 1 / fireRate)
+        {
+            countdown = 0;
+
+            StartCoroutine(Fire(enemyPos));
+        }
+        else countdown += Time.deltaTime;
+    }
+
+    Vector3 FindClosest(Collider[] colliders, out Transform closestTransform)
     {
         float closest = float.MaxValue;
         Vector3 closestPoint = transform.forward;
-        localPos = transform.localPosition;
+        closestTransform = transform;
         foreach (var item in colliders)
         {
             float temp;
@@ -59,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 closest = temp;
                 closestPoint = item.transform.position;
-                localPos = item.transform.localPosition;
+                closestTransform = item.transform;
             }
         }
         return closestPoint;
@@ -68,7 +74,9 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator Fire(Vector3 enemyPos)
     {
         line.enabled = true;
-        line.SetPositions(new Vector3[] { gun.position + gun.forward * gunOffset + Vector3.up * 2, enemyPos + Vector3.up * 2 });
+        line.SetPositions(new Vector3[] { gunTip.position, enemyPos + new Vector3(0, gunTip.position.y, 0) /*+ Vector3.up * gunTip.position.y*/ });
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         line.enabled = false;
     }
