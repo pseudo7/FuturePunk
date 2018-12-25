@@ -7,22 +7,57 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     Transform playerTransform;
-
+    Animator enemyAC;
     NavMeshAgent enemyNMA;
+    Coroutine findingPlayerCoroutine;
 
-    void Start()
+    void Awake()
     {
+        enemyAC = GetComponent<Animator>();
         enemyNMA = GetComponent<NavMeshAgent>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        StartCoroutine(GotoPlayerCoroutine());
+        findingPlayerCoroutine = StartCoroutine(GotoPlayerCoroutine());
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        enemyNMA.isStopped = true;
+        //if (findingPlayerCoroutine != null)
+        //    StopCoroutine(findingPlayerCoroutine);
+        //enemyNMA.SetDestination(transform.position);
+        enemyAC.SetBool("Shoot", true);
+    }
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    Debug.Log(collision.collider.name);
+    //}
+
+
+    private void OnTriggerStay(Collider other)
+    {
+        transform.LookAt(playerTransform);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        enemyNMA.isStopped = false;
+
+        //findingPlayerCoroutine = StartCoroutine(GotoPlayerCoroutine());
+        enemyAC.SetBool("Shoot", false);
+    }
+
+    //private void OnCollisionExit(Collision collision)
+    //{
+    //    findingPlayerCoroutine = StartCoroutine(GotoPlayerCoroutine());
+    //}
 
     IEnumerator GotoPlayerCoroutine()
     {
         while (gameObject.activeInHierarchy)
         {
             enemyNMA.SetDestination(playerTransform.position);
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(.25f);
         }
     }
 }
