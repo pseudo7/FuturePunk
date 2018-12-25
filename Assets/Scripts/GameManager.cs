@@ -16,6 +16,12 @@ public class GameManager : MonoBehaviour
             SpawnEnemy();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
+    }
+
     void SpawnEnemy()
     {
         var enemyRenderer = enemyPrefab.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>();

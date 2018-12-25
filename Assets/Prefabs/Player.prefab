@@ -1804,7 +1804,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSmoothness: 15
-  checkEnemyRadius: 15
+  checkEnemyRadius: 12
   fireRate: 3
   gunTip: {fileID: 4423412989846722}
 --- !u!120 &120193291196235420
@@ -1888,7 +1888,7 @@ LineRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 0
+    numCornerVertices: 90
     numCapVertices: 0
     alignment: 0
     textureMode: 0
