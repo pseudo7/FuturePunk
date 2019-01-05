@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
     LineRenderer line;
     float countdown;
 
+
     void Awake()
     {
         enemyHealth = Constants.ENEMY_HEALTH;
@@ -68,10 +69,9 @@ public class Enemy : MonoBehaviour
     {
         AudioManager.Instance.Play(Constants.ENEMY_LASER_AUDIO);
         countdown = 0;
-        Handheld.Vibrate();
         var player = playerTransform.GetComponent<Player>();
         if (player.playerHealth > 0)
-            if (player.PlayerHit())
+            if (player.PlayerHit(1, 1))
                 yield break;
         line.enabled = true;
         line.SetPositions(new Vector3[] { gunTip.position, playerTransform.position + new Vector3(0, gunTip.position.y, 0) });

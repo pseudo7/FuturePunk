@@ -7,15 +7,18 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public GameObject enemyPrefab;
-
     public EnemyTexture[] enemyTextures;
+    public Transform[] enemySpawns;
 
     public int enemyCount = 10;
+
+    SpriteRenderer hitFlash;
 
     private void Awake()
     {
         if (!Instance)
             Instance = this;
+        hitFlash = Camera.main.transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
 
     void Start()
@@ -31,6 +34,14 @@ public class GameManager : MonoBehaviour
             Application.Quit();
     }
 
+#if UNITY_EDITOR
+    [UnityEditor.MenuItem("Pseudo/Capture")]
+    public static void Capture()
+    {
+        ScreenCapture.CaptureScreenshot(string.Format("Screenshots{0}{1}.png", System.IO.Path.DirectorySeparatorChar, System.DateTime.Now.Ticks.ToString()));
+    }
+#endif
+
     void SpawnEnemy()
     {
         var enemyRenderer = enemyPrefab.transform.GetChild(0).GetComponent<SkinnedMeshRenderer>();
@@ -45,7 +56,9 @@ public class GameManager : MonoBehaviour
         mat.SetTexture("_MainTex", enemyTexture.mainGun);
         mat.SetTexture("_Illum", null);
         gunRenderer.material = mat;
-        Instantiate(enemyPrefab, new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)), Quaternion.identity);
+        var spawnPoint = enemySpawns[Random.Range(0, enemySpawns.Length)];
+        var spawnPosition = spawnPoint.position + Vector3.right * Random.Range(-5, 5) * 5;
+        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
     }
 
     public void RestartLevel(float delay)
@@ -57,6 +70,16 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
+
+    public IEnumerator ShowHitFlash(int count)
+    {
+        while (count-- > 0)
+        {
+            hitFlash.color = Color.red;
+            yield return new WaitForEndOfFrame();
+            hitFlash.color = Color.clear;
+        }
     }
 
     [System.Serializable]

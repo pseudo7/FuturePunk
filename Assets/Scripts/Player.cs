@@ -46,6 +46,12 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Lava"))
+            PlayerHit(10, 3);
+    }
+
     private void LateUpdate()
     {
         transform.GetChild(0).LookAt(Camera.main.transform);
@@ -58,9 +64,10 @@ public class Player : MonoBehaviour
         else countdown += Time.deltaTime;
     }
 
-    public bool PlayerHit()
+    public bool PlayerHit(int hitAmount, int flashCount)
     {
-        UpdateHealthBar(--playerHealth);
+        UpdateHealthBar(playerHealth -= hitAmount);
+        StartCoroutine(GameManager.Instance.ShowHitFlash(flashCount));
 
         if (playerHealth <= 0)
         {
@@ -82,7 +89,9 @@ public class Player : MonoBehaviour
 
     void UpdateHealthBar(int health)
     {
-        transform.GetChild(0).localScale = new Vector3(Constants.ORIG_X_SCALE * health / (float)Constants.PLAYER_HEALTH, .2f, 1f);
+        transform.GetChild(0).localScale = new Vector3(Constants.ORIG_X_SCALE * health / Constants.PLAYER_HEALTH, .2f, 1f);
+        if (health < 0)
+            transform.GetChild(0).localScale = Vector3.zero;
     }
 
     Transform FindClosest(Collider[] colliders)
