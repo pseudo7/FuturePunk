@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
     [UnityEditor.MenuItem("Pseudo/Capture")]
     public static void Capture()
     {
-        ScreenCapture.CaptureScreenshot(string.Format("Screenshots{0}{1}.png", System.IO.Path.DirectorySeparatorChar, System.DateTime.Now.Ticks.ToString()));
+        ScreenCapture.CaptureScreenshot(string.Format("{0}.png", System.DateTime.Now.Ticks.ToString()));
     }
 #endif
 

@@ -34,11 +34,13 @@ public class Player : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, transform.position + new Vector3(x, 0, y), 1 / movementSmoothness);
 
         var nearByEnemies = Physics.OverlapSphere(transform.position, checkEnemyRadius, LayerMask.GetMask("Enemy"), QueryTriggerInteraction.Collide);
-        var closestPoint = FindClosest(nearByEnemies);
         if (nearByEnemies.Length > 0)
-            FireAtRate(closestPoint);
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(closestPoint.position - transform.position), .4f);
-
+        {
+            var closestPoint = FindClosest(nearByEnemies);
+            if (nearByEnemies.Length > 0)
+                FireAtRate(closestPoint);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(closestPoint.position - transform.position), .4f);
+        }
         if (!Utility.isGameOver)
         {
             playerAC.SetFloat("S", x);
@@ -49,7 +51,10 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Lava"))
+        {
+            Handheld.Vibrate();
             PlayerHit(10, 3);
+        }
     }
 
     private void LateUpdate()
