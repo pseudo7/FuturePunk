@@ -4,7 +4,9 @@
 
 ### Future Punk is using various Unity Components like AI NavMesh, Depth-Only Camera, Specular Materials, Animator/Animations, Cross-Platform Inputs, Sounds, etc.
 
-<img src="/Screenshots/4.png">
+<p align="center">
+<img src="/GIFs/Future_Punk.gif">
+</p>
 
 ### Salient features of the game:
 - Easy to play using single Joystick controller.
@@ -19,6 +21,7 @@
 <img src="/Screenshots/1.png">
 <img src="/Screenshots/2.png">
 <img src="/Screenshots/3.png">
+<img src="/Screenshots/4.png">
 <img src="/Screenshots/5.png">
 <img src="/Screenshots/6.png">
 <img src="/Screenshots/8.png">
